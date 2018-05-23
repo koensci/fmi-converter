@@ -1,2 +1,5 @@
 /foundation/target/
-**/src/main/resources/application.properties
+/foundation/foundation-input/
+/foundation/cbio-output/
+/.idea/
+*.iml

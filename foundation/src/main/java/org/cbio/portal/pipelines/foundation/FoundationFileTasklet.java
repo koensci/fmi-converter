@@ -121,8 +121,11 @@ public class FoundationFileTasklet implements Tasklet {
     private List<CaseType> extractFileCaseData(File xmlFile) throws JAXBException, IOException, ParserConfigurationException, SAXException {
         List<CaseType> newCases = new ArrayList();
 
-        // get the document root and determine how to unmarshal document  
-        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlFile);
+        // get the document root and determine how to unmarshal document
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+
+        Document document = factory.newDocumentBuilder().parse(xmlFile);
         Element root = document.getDocumentElement();        
         if (root.getNodeName().equals("ClientCaseInfo")) {
             // unmarshal document with root tag = ClientCaseInfo

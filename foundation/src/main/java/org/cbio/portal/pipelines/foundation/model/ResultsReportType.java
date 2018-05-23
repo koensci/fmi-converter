@@ -38,7 +38,8 @@ import javax.xml.bind.annotation.*;
  *
  * @author ochoaa
  */
-@XmlRootElement(name="ResultsReport")
+
+@XmlRootElement(name="ResultsReport", namespace = "http://integration.foundationmedicine.com/reporting")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ResultsReportType", propOrder = {
     "variantReport",
