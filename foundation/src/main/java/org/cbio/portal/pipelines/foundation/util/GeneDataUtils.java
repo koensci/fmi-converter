@@ -255,7 +255,7 @@ public class GeneDataUtils {
      * @return 
      */
     public String resolveEntrezId(String hugoSymbol) {
-        if (!this.normalizedGeneSymbols) return "0";
+        if (!this.normalizedGeneSymbols) return "1";
         return hugoGeneSymbolMap.getOrDefault(hugoSymbol, "0");
     }
     

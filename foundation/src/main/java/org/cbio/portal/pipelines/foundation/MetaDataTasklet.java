@@ -59,6 +59,9 @@ public class MetaDataTasklet implements Tasklet {
     @Value("#{jobParameters[cancerStudyId]}")
     private String cancerStudyIdentifier;
 
+    @Value("#{jobParameters[cancerType]}")
+    private String cancerType;
+
     @Resource(name="mutationsMetaData")
     public Map<String, String> mutationsMetaData;
 
@@ -71,6 +74,15 @@ public class MetaDataTasklet implements Tasklet {
     @Resource(name="genePanelMetaData")
     public Map<String, String> genePanelMetaData;
 
+    @Resource(name="studyMetaData")
+    public Map<String, String> studyMetaData;
+
+    @Resource(name="cancerTypeMetaData")
+    public Map<String, String> cancerTypeMetaData;
+
+    @Resource(name="clinicalMetaData")
+    public Map<String, String> clinicalMetaData;
+
     private static final Log LOG = LogFactory.getLog(MetaDataTasklet.class);
 
     @Override
@@ -80,6 +92,9 @@ public class MetaDataTasklet implements Tasklet {
         writeCnaMetaFile(executionContext);
         writeFusionsMetaFile(executionContext);
         writeGenePanelMetaFile(executionContext);
+        writeStudyMetaFile(executionContext);
+        writeCancerTypeMetaFile(executionContext);
+        writeClinicalMetaFile(executionContext);
 
         return RepeatStatus.FINISHED;
     }
@@ -156,6 +171,44 @@ public class MetaDataTasklet implements Tasklet {
         writeMetaStagingFile(executionContext, metaFilename, genePanelData);
     }
 
+    private void writeStudyMetaFile(ExecutionContext executionContext) throws Exception {
+        String metaFilename = outputDirectory + "meta_study.txt";
+
+        List<String> studyData = new ArrayList();
+        for (String key : studyMetaData.keySet()) {
+            String value = studyMetaData.get(key).replace("<study_id>", cancerStudyIdentifier).replace("<cancer_type>", cancerType);
+            studyData.add(key+":"+value);
+        }
+
+        LOG.info("Writing study meta file: " + metaFilename);
+        writeMetaStagingFile(executionContext, metaFilename, studyData);
+    }
+
+    private void writeCancerTypeMetaFile(ExecutionContext executionContext) throws Exception {
+        String metaFilename = outputDirectory + "meta_cancer_type.txt";
+
+        List<String> cancerTypeData = new ArrayList();
+        for (String key : cancerTypeMetaData.keySet()) {
+            String value = cancerTypeMetaData.get(key).replace("<study_id>", cancerStudyIdentifier).replace("<cancer_type>", cancerType);
+            cancerTypeData.add(key+":"+value);
+        }
+
+        LOG.info("Writing study meta file: " + metaFilename);
+        writeMetaStagingFile(executionContext, metaFilename, cancerTypeData);
+    }
+
+    private void writeClinicalMetaFile(ExecutionContext executionContext) throws Exception {
+        String metaFilename = outputDirectory + "meta_gene_matrix.txt";
+
+        List<String> clinicalData = new ArrayList();
+        for (String key : clinicalMetaData.keySet()) {
+            String value = clinicalMetaData.get(key).replace("<study_id>", cancerStudyIdentifier);
+            clinicalData.add(key+":"+value);
+        }
+
+        LOG.info("Writing gene panel meta file: " + metaFilename);
+        writeMetaStagingFile(executionContext, metaFilename, clinicalData);
+    }
     /**
      * Create and Write meta data file.
      * @param executionContext

@@ -47,7 +47,7 @@ public class MetaDataConfiguration {
     public Map<String, String> mutationsMetaData() {
         Map<String, String> mutationsMap = new LinkedHashMap<>();
         mutationsMap.put("cancer_study_identifier", "<study_id>");
-        mutationsMap.put("stable_id", "<study_id>_mutations");
+        mutationsMap.put("stable_id", "mutations");
         mutationsMap.put("genetic_alteration_type", "MUTATION_EXTENDED");
         mutationsMap.put("show_profile_in_analysis_tab", "true");
         mutationsMap.put("datatype", "MAF");
@@ -62,7 +62,7 @@ public class MetaDataConfiguration {
     public Map<String, String> cnaMetaData() {
         Map<String, String> cnaMap = new LinkedHashMap<>();
         cnaMap.put("cancer_study_identifier", "<study_id>");
-        cnaMap.put("stable_id", "<study_id>_cna");
+        cnaMap.put("stable_id", "cna");
         cnaMap.put("genetic_alteration_type", "COPY_NUMBER_ALTERATION");
         cnaMap.put("show_profile_in_analysis_tab", "true");
         cnaMap.put("datatype", "DISCRETE");
@@ -77,7 +77,7 @@ public class MetaDataConfiguration {
     public Map<String, String> fusionsMetaData() {
         Map<String, String> fusionsMap = new LinkedHashMap<>();
         fusionsMap.put("cancer_study_identifier", "<study_id>");
-        fusionsMap.put("stable_id", "<study_id>_mutations");
+        fusionsMap.put("stable_id", "fusion");
         fusionsMap.put("genetic_alteration_type", "FUSION");
         fusionsMap.put("show_profile_in_analysis_tab", "true");
         fusionsMap.put("datatype", "FUSION");
@@ -92,8 +92,43 @@ public class MetaDataConfiguration {
     public Map<String, String> genePanelMetaData() {
         Map<String, String> genePanelMap = new LinkedHashMap<>();
         genePanelMap.put("cancer_study_identifier", "<study_id>");
+        genePanelMap.put("genetic_alteration_type", "GENE_PANEL_MATRIX");
+        genePanelMap.put("datatype", "GENE_PANEL_MATRIX");
         genePanelMap.put("data_filename", "data_gene_matrix.txt");
         return genePanelMap;
     }
 
+    @Bean(name="studyMetaData")
+    public Map<String, String> studyMetaData() {
+        Map<String, String> studyMap = new LinkedHashMap<>();
+        studyMap.put("type_of_cancer", "<cancer_type>");
+        studyMap.put("cancer_study_identifier", "<study_id>");
+        studyMap.put("name", "<cancer_type> (<study_id>)");
+        studyMap.put("short_name", "<cancer_type> (<study_id>)");
+        studyMap.put("description", "Foundation dataset for <cancer_type> (<study_id>)");
+        studyMap.put("add_global_case_list", "true");
+
+        return studyMap;
+    }
+
+    @Bean(name="cancerTypeMetaData")
+    public Map<String, String> cancerTypeMetaData() {
+        Map<String, String> cancerTypeMap = new LinkedHashMap<>();
+        cancerTypeMap.put("genetic_alteration_type", "CANCER_TYPE");
+        cancerTypeMap.put("datatype", "CANCER_TYPE");
+        cancerTypeMap.put("data_filename", "cancer_type.txt");
+
+        return cancerTypeMap;
+    }
+
+    @Bean(name="clinicalMetaData")
+    public Map<String, String> clinicalMetaData() {
+        Map<String, String> clinicalMap = new LinkedHashMap<>();
+        clinicalMap.put("cancer_study_identifier", "<study_id>");
+        clinicalMap.put("genetic_alteration_type", "CLINICAL");
+        clinicalMap.put("datatype", "SAMPLE_ATTRIBUTES");
+        clinicalMap.put("data_filename", "data_clinical.txt");
+
+        return clinicalMap;
+    }
 }

@@ -63,12 +63,20 @@ public class MutationDataProcessor implements ItemProcessor<CaseType, String> {
             MutationData md = new MutationData(caseType.getCase(), sv);
             md.setGene(geneDataUtils.resolveGeneSymbol(md.getGene()));
             md.setEntrezGeneId(geneDataUtils.resolveEntrezId(md.getGene()));
-            
+
+            if (sv.getProteinEffect().contains("+")) {
+                continue;
+            }
+            if (sv.getCdsEffect().contains("+")) {
+                continue;
+            }
+
             // resolve reference allele if empty string and cds effect is del
             if (sv.getCdsEffect().toLowerCase().contains("del") && md.getRefAllele().isEmpty()) {
                 LOG.info("Attempting to salvage empty reference allele using EnsEMBL REST API for sample id: " + caseType.getCase() + " from cds effect: " + sv.getCdsEffect());
                 md.setRefAllele(FoundationUtils.salvageEmptyReferenceAllele(md.getGene(), sv.getPosition(), sv.getCdsEffect()));
             }
+
             if (md.getRefAllele().isEmpty()) {
                 LOG.warn("Could not resolve reference allele for sample id: " + caseType.getCase() + " from cds effect: " + sv.getCdsEffect());
             }

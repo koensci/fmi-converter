@@ -60,7 +60,8 @@ public class FoundationPipeline {
             .addOption ("o", "output", true, "Output directory for writing staging files")
             .addOption ("c", "cancer_study_id", true, "Cancer study identifier for meta data")
             .addOption("g", "gene_data_filename", true, "Path to gene symbol data file 'Homo_sapiens.gene_info'")
-            .addOption("xml", "generate_xml", false, "Generate merged XML document ");
+            .addOption("xml", "generate_xml", false, "Generate merged XML document ")
+            .addOption("t", "cancer_type",true, "Abbreviation for cancer type");
          
         return gnuOptions;
     }   
@@ -71,7 +72,7 @@ public class FoundationPipeline {
         System.exit(exitStatus);
     }  
             
-    private static void launchJob(String[] args, String sourceDirectory, String outputDirectory, String cancerStudyId, String geneDataFilename, boolean generateXmlDocument) throws Exception {
+    private static void launchJob(String[] args, String sourceDirectory, String outputDirectory, String cancerStudyId, String geneDataFilename, String cancerType, boolean generateXmlDocument) throws Exception {
         // set up application context and job launcher
         SpringApplication app = new SpringApplication(FoundationPipeline.class);
         ConfigurableApplicationContext ctx= app.run(args);
@@ -88,6 +89,7 @@ public class FoundationPipeline {
                 .addString("outputDirectory", outputDirectory)
                 .addString ("cancerStudyId", cancerStudyId)
                 .addString("geneDataFilename", geneDataFilename)
+                .addString("cancerType", cancerType)
                 .toJobParameters();
         JobExecution jobExecution = jobLauncher.run(foundationJob, jobParameters);
         
@@ -103,7 +105,8 @@ public class FoundationPipeline {
         if (commandLine.hasOption("h") ||
             !commandLine.hasOption("source") ||
             !commandLine.hasOption("output") ||
-            !commandLine.hasOption("cancer_study_id"))  {
+            !commandLine.hasOption("cancer_study_id") ||
+                !commandLine.hasOption("cancer_type"))  {
             help(gnuOptions, 0);        
         }
 
@@ -111,6 +114,7 @@ public class FoundationPipeline {
         String sourceDirectory = commandLine.getOptionValue("source");
         String outputDirectory = commandLine.getOptionValue("output");
         String cancerStudyId = commandLine.getOptionValue("cancer_study_id");
+        String cancerType = commandLine.getOptionValue("cancer_type");
         if (!sourceDirectory.endsWith(File.separator)) sourceDirectory += File.separator;
         if (!outputDirectory.endsWith(File.separator)) outputDirectory += File.separator;
         
@@ -119,7 +123,7 @@ public class FoundationPipeline {
             geneDataFilename = commandLine.getOptionValue("g");
         }
         
-        launchJob(args, sourceDirectory, outputDirectory, cancerStudyId, geneDataFilename, commandLine.hasOption("generate_xml"));
+        launchJob(args, sourceDirectory, outputDirectory, cancerStudyId, geneDataFilename, cancerType, commandLine.hasOption("generate_xml"));
     }
     
 }
