@@ -42,6 +42,7 @@ public class CompositeResultBean {
     private String mutationDataResult;
     private String fusionDataResult;
     private String genePanelDataResult;
+    private String patientDataResult;
 
     /**
      * @return the clinicalDataResult
@@ -56,6 +57,21 @@ public class CompositeResultBean {
     public void setClinicalDataResult(String clinicalDataResult) {
         this.clinicalDataResult = clinicalDataResult;
     }
+
+    /**
+     * @return the patientDataResult
+     */
+    public String getPatientDataResult() {
+        return patientDataResult;
+    }
+
+    /**
+     * @param patientDataResult the patientDataResult to set
+     */
+    public void setPatientDataResult(String patientDataResult) {
+        this.patientDataResult = patientDataResult;
+    }
+
 
     /**
      * @return the mutationDataResult

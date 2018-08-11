@@ -60,6 +60,7 @@ public class FoundationCompositeProcessor implements ItemProcessor<CaseType, Com
     private final MutationDataProcessor mutationDataProcessor = new MutationDataProcessor();
     private final FusionDataProcessor fusionDataProcessor = new FusionDataProcessor();
     private final GenePanelDataProcessor genePanelDataProcessor = new GenePanelDataProcessor();
+    private final PatientDataProcessor patientDataProcessor = new PatientDataProcessor();
 
     private static final Log LOG = LogFactory.getLog(FoundationCompositeProcessor.class);
 
@@ -69,6 +70,7 @@ public class FoundationCompositeProcessor implements ItemProcessor<CaseType, Com
         clinicalDataProcessor.setProperties(addData, columns);
         mutationDataProcessor.setProperties(geneDataUtils);
         fusionDataProcessor.setProperties(geneDataUtils);
+        patientDataProcessor.setProperties(addData, columns);
 
         final CompositeResultBean compositeResultBean = new CompositeResultBean();
         try {
@@ -76,6 +78,7 @@ public class FoundationCompositeProcessor implements ItemProcessor<CaseType, Com
             compositeResultBean.setMutationDataResult(mutationDataProcessor.process(ct));
             compositeResultBean.setFusionDataResult(fusionDataProcessor.process(ct));
             compositeResultBean.setGenePanelDataResult(genePanelDataProcessor.process(ct));
+            compositeResultBean.setPatientDataResult(patientDataProcessor.process(ct));
         }
         catch (NullPointerException ex ) {
             LOG.error("Error processing clinical, fusion, mutation data, or gene panel data for case: " + ct.getCase());

@@ -384,7 +384,6 @@ public class ClinicalData {
         Map<String, String> map = new LinkedHashMap<>();
         map.put("PATIENT_ID","getSampleId");
         map.put("SAMPLE_ID","getSampleId");
-        map.put("SEX","getGender");
         map.put("STUDY_ID","getStudyId");
         map.put("PIPELINE_VERSION","getPipelineVersion");
         map.put("PERCENT_TUMOR_NUCLEI","getTumorNucleiPercent");

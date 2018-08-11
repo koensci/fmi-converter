@@ -184,6 +184,7 @@ public class BatchConfiguration {
         delegates.add(mutationWriter());
         delegates.add(fusionWriter());
         delegates.add(genePanelWriter());
+        delegates.add(patientWriter());
 
         writer.setDelegates(delegates);
         return writer;
@@ -212,6 +213,10 @@ public class BatchConfiguration {
     public ItemStreamWriter<CompositeResultBean> genePanelWriter() {
         return new GenePanelDataWriter();
     }
+
+    @Bean
+    @StepScope
+    public ItemStreamWriter<CompositeResultBean> patientWriter() { return new PatientDataWriter(); }
 
     /**
      * Step for CNA data.

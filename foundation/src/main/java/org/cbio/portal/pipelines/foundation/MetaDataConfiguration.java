@@ -111,7 +111,7 @@ public class MetaDataConfiguration {
         return studyMap;
     }
 
-    @Bean(name="cancerTypeMetaData")
+    /*@Bean(name="cancerTypeMetaData")
     public Map<String, String> cancerTypeMetaData() {
         Map<String, String> cancerTypeMap = new LinkedHashMap<>();
         cancerTypeMap.put("genetic_alteration_type", "CANCER_TYPE");
@@ -119,7 +119,7 @@ public class MetaDataConfiguration {
         cancerTypeMap.put("data_filename", "cancer_type.txt");
 
         return cancerTypeMap;
-    }
+    }*/
 
     @Bean(name="clinicalMetaData")
     public Map<String, String> clinicalMetaData() {
@@ -127,8 +127,19 @@ public class MetaDataConfiguration {
         clinicalMap.put("cancer_study_identifier", "<study_id>");
         clinicalMap.put("genetic_alteration_type", "CLINICAL");
         clinicalMap.put("datatype", "SAMPLE_ATTRIBUTES");
-        clinicalMap.put("data_filename", "data_clinical.txt");
+        clinicalMap.put("data_filename", "data_clinical_sample.txt");
 
         return clinicalMap;
+    }
+
+    @Bean(name="patientMetaData")
+    public Map<String, String> patientMetaData() {
+        Map<String, String> patientMap = new LinkedHashMap<>();
+        patientMap.put("cancer_study_identifier", "<study_id>");
+        patientMap.put("genetic_alteration_type", "CLINICAL");
+        patientMap.put("datatype", "PATIENT_ATTRIBUTES");
+        patientMap.put("data_filename", "data_clinical_patient.txt");
+
+        return patientMap;
     }
 }

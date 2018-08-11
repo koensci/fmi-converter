@@ -4,6 +4,18 @@
     <modelVersion>4.0.0</modelVersion>
     <name>MSKCC Foundation XML Converter Pipeline</name>
     <description>Foundation Medicine XML Converter Pipeline</description>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <parent>
         <groupId>org.cbio.portal.pipelines</groupId>
         <artifactId>master</artifactId>
@@ -38,7 +50,6 @@
       <version>2.4</version>
       <type>jar</type>
     </dependency>
-            
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>

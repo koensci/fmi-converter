@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Memorial Sloan-Kettering Cancer Center.
+ * Copyright (c) 2016-17 Memorial Sloan-Kettering Cancer Center.
  *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS
@@ -32,32 +32,41 @@
 
 package org.cbio.portal.pipelines.foundation;
 
-import org.cbio.portal.pipelines.foundation.model.CaseType;
-import org.cbio.portal.pipelines.foundation.model.staging.GenePanelData;
-
-import java.util.*;
-import com.google.common.base.Strings;
 import org.apache.commons.lang.StringUtils;
+import org.cbio.portal.pipelines.foundation.model.CaseType;
+import org.cbio.portal.pipelines.foundation.model.staging.PatientData;
 import org.springframework.batch.item.ItemProcessor;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
- * @author ochoaa
+ * @author Prithi Chakrapani, ochoaa
  */
-public class GenePanelDataProcessor implements ItemProcessor<CaseType, String> {
+public class PatientDataProcessor implements ItemProcessor<CaseType, String> {
+    
+    private boolean addData;
+    private List<String> columns;
 
+    public void setProperties(boolean addData, List<String> columns) {
+        this.addData = addData;
+        this.columns = columns;
+    }
+    
     @Override
-    public String process(final CaseType caseType) throws Exception {
-        GenePanelData genePanelData = new GenePanelData(caseType);
-        if (Strings.isNullOrEmpty(genePanelData.getMutationsPanel())) {
-            return genePanelData.getSampleId() + "\tFMI-unknown";
-        }
+    public String process(CaseType caseType) throws Exception {
+        PatientData patientData = new PatientData(caseType);
+        Map<String,String> map = patientData.getStagingMap();
+        
+        // get standard clinical data values for record
         List<String> record = new ArrayList();
-        Map<String, String> map = genePanelData.getStagingMap();
         for (String field : map.keySet()) {
-            String value = genePanelData.getClass().getMethod(map.get(field)).invoke(genePanelData).toString();
+            String value = patientData.getClass().getMethod(map.get(field)).invoke(patientData).toString();
             record.add(value);
         }
+
         return StringUtils.join(record, "\t");
     }
 

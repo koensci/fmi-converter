@@ -32,7 +32,7 @@
 
 package org.cbio.portal.pipelines.foundation;
 
-import org.cbio.portal.pipelines.foundation.model.staging.ClinicalData;
+import org.cbio.portal.pipelines.foundation.model.staging.PatientData;
 
 import java.io.*;
 import java.util.*;
@@ -48,7 +48,7 @@ import org.springframework.core.io.FileSystemResource;
  *
  * @author Prithi Chakrapani, ochoaa
  */
-public class ClinicalDataWriter  implements ItemStreamWriter<CompositeResultBean> {
+public class PatientDataWriter  implements ItemStreamWriter<CompositeResultBean> {
     
     @Value("#{jobParameters[outputDirectory]}")
     private String outputDirectory;
@@ -64,7 +64,7 @@ public class ClinicalDataWriter  implements ItemStreamWriter<CompositeResultBean
     
     @Override
     public void open(ExecutionContext executionContext) throws ItemStreamException {
-        File stagingFile = new File (outputDirectory, "data_clinical_sample.txt");
+        File stagingFile = new File (outputDirectory, "data_clinical_patient.txt");
         PassThroughLineAggregator aggr = new PassThroughLineAggregator();
         flatFileItemWriter.setLineAggregator(aggr);
         flatFileItemWriter.setHeaderCallback(new FlatFileHeaderCallback() {
@@ -82,22 +82,12 @@ public class ClinicalDataWriter  implements ItemStreamWriter<CompositeResultBean
         List <String> columns = new ArrayList();
         List <String> type = new ArrayList();
         List <String> num = new ArrayList();
-        
-        Map<String, String> map = new ClinicalData().getStagingMap();
+
+        Map<String, String> map = new PatientData().getStagingMap();
         for (String key : map.keySet() ) {
             columns.add(key);
             type.add("STRING");
             num.add("1");
-        }
-
-        // format columns for non-human clinical data if exists
-        if (addNonHumanContentData) {
-            for (String organism : nonHumanContentColumns) {
-                String column = organism.toUpperCase().replace("-", "_") + "_STATUS";
-                columns.add(column);
-                type.add("STRING");
-                num.add("1");
-            }
         }
 
         header.add("#" + StringUtils.join(columns, "\t"));
@@ -122,7 +112,7 @@ public class ClinicalDataWriter  implements ItemStreamWriter<CompositeResultBean
         writeList.clear();
         List<String> writeList = new ArrayList<>();
         for (CompositeResultBean result : items) {
-            writeList.add(result.getClinicalDataResult());
+            writeList.add(result.getPatientDataResult());
         }
         flatFileItemWriter.write(writeList);
     }

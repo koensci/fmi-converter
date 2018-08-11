@@ -86,7 +86,7 @@ public class MutationDataWriter implements ItemStreamWriter <CompositeResultBean
         // format the MAF header
         header.add(getSequencedSamples(fmiCaseList));
         header.add(StringUtils.join(columns, "\t"));
-        return StringUtils.join(header, "\n"); 
+        return StringUtils.join(header, "\n");
     }
     
     public String getSequencedSamples(List<CaseType> fmiCaseList) {
