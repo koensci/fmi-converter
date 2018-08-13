@@ -62,7 +62,7 @@ public class CnaDataReader implements ItemStreamReader<String> {
 
     /**
      * Generate map of gene to CNA data 
-     * @param fmiCaseMap
+     * @param fmiCaseTypeMap
      * @return 
      */
     private List<String> generateCnaRowData(Map<String, CaseType> fmiCaseTypeMap) {
@@ -96,12 +96,12 @@ public class CnaDataReader implements ItemStreamReader<String> {
         
         // format row data for CNA file                
         List<String> cnaRowData = new ArrayList();
-        Integer geneIndex = 1;
+
         for (String gene : geneList) {            
             List<String> geneCnaData = new ArrayList();            
             geneCnaData.add(gene);
-            geneCnaData.add(String.valueOf(geneIndex)/*geneDataUtils.resolveEntrezId(gene)*/);
-            geneIndex++;
+            geneCnaData.add(geneDataUtils.resolveEntrezId(gene));
+
             for (String caseId : fmiCaseTypeMap.keySet()) {
                 if (cnaMap.containsKey(gene, caseId)) {
                     geneCnaData.add((String) cnaMap.get(gene, caseId));
